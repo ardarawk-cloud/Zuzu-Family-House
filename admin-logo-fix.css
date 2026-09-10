@@ -1,0 +1,3 @@
+.sidebar-brand{height:86px!important;padding:0 8px!important;overflow:hidden!important;position:relative!important}
+.sidebar-logo-bg{display:block!important;width:100%!important;height:100%!important;background-image:url("assets/zuzu-logo.webp")!important;background-repeat:no-repeat!important;background-size:100% auto!important;background-position:center 43%!important}
+@media(max-width:980px){.sidebar-brand{height:62px!important}.sidebar-logo-bg{background-position:center 43%!important}}
