@@ -88,11 +88,18 @@
     <div class="modal-backdrop" data-close-modal></div>
     <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="bookingTitle">
       <button class="modal-close" type="button" data-close-modal aria-label="Close">×</button>
-      <div class="modal-head"><div class="eyebrow">Reservations</div><h2 id="bookingTitle">Reserve ZUZU.</h2><p>Review your stay and send a direct reservation request.</p></div>
+      <div class="modal-head"><div class="eyebrow">Reservations</div><h2 id="bookingTitle">Reserve ZUZU.</h2><p>Choose your stay dates, review the estimate and send a direct reservation request.</p></div>
       <div class="modal-grid">
         <form id="bookingForm" class="booking-form">
-          <div class="selected-stay" id="selectedStay"><span>Your stay</span><strong>Select arrival and departure above</strong></div>
-          <div class="form-grid"><div class="field"><label for="guestName">Full name</label><input required id="guestName" name="name" autocomplete="name" placeholder="Your full name"></div><div class="field"><label for="guestEmail">Email</label><input required id="guestEmail" type="email" name="email" autocomplete="email" placeholder="you@email.com"></div><div class="field"><label for="guestPhone">WhatsApp / phone</label><input required id="guestPhone" name="phone" autocomplete="tel" placeholder="+62 ..."></div><div class="field"><label for="guestNotes">Notes</label><input id="guestNotes" name="notes" placeholder="Arrival time or request"></div></div>
+          <div class="selected-stay" id="selectedStay"><span>Your stay</span><strong>Select arrival and departure below</strong></div>
+          <div class="form-grid">
+            <div class="field"><label for="modalCheckin">Arrival</label><input type="date" id="modalCheckin" aria-label="Arrival date"></div>
+            <div class="field"><label for="modalCheckout">Departure</label><input type="date" id="modalCheckout" aria-label="Departure date"></div>
+            <div class="field"><label for="guestName">Full name</label><input required id="guestName" name="name" autocomplete="name" placeholder="Your full name"></div>
+            <div class="field"><label for="guestEmail">Email</label><input required id="guestEmail" type="email" name="email" autocomplete="email" placeholder="you@email.com"></div>
+            <div class="field"><label for="guestPhone">WhatsApp / phone</label><input required id="guestPhone" name="phone" autocomplete="tel" placeholder="+62 ..."></div>
+            <div class="field"><label for="guestNotes">Notes</label><input id="guestNotes" name="notes" placeholder="Arrival time or request"></div>
+          </div>
           <div class="notice" id="bookingNotice"></div><button class="button gold submit-button" type="submit">Send reservation request <span>→</span></button><div class="success-box" id="bookingSuccess"></div>
         </form>
         <aside class="summary"><div class="summary-head"><span>Stay estimate</span><small>ZUZU direct</small></div><div class="summary-row"><span>Nights</span><strong id="sumNights">—</strong></div><div class="summary-row"><span>Guests</span><strong id="sumGuests">2 guests</strong></div><div class="summary-row"><span>Room subtotal</span><strong id="sumSubtotal">Rp0</strong></div><div class="summary-row"><span>Service</span><strong id="sumService">Rp0</strong></div><div class="summary-row"><span>Tax</span><strong id="sumTax">Rp0</strong></div><div class="summary-total"><span>Total estimate</span><strong id="sumTotal">Rp0</strong></div><p>Final availability and payment instructions are confirmed directly by ZUZU.</p></aside>
@@ -100,6 +107,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=7"></script>
+  <script src="app.js?v=8"></script>
 </body>
 </html>
