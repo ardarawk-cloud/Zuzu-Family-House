@@ -1,0 +1,7 @@
+.brand{height:86px!important;overflow:hidden!important;position:relative!important}
+.brand img{width:100%!important;height:auto!important;display:block!important;transform:translateY(-23%)!important}
+.identity-logo{height:112px!important;overflow:hidden!important;padding:0 10px!important}
+.identity-logo img{width:100%!important;height:auto!important;display:block!important;transform:translateY(-23%)!important}
+.footer-logo-card{height:118px!important;overflow:hidden!important;padding:0 10px!important}
+.footer-logo-card img{width:100%!important;height:auto!important;display:block!important;transform:translateY(-23%)!important}
+@media(max-width:680px){.brand{height:76px!important}.footer-logo-card{height:108px!important}}
