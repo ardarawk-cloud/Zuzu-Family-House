@@ -2,100 +2,85 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#14251f">
-  <title>ZUZU Owner Dashboard</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="theme-color" content="#10241f">
+  <title>ZUZU Owner Suite</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="admin-premium.css">
 </head>
 <body class="admin-body">
-<div class="admin-shell">
-  <aside class="sidebar">
-    <a class="sidebar-brand" href="index.html" aria-label="Open ZUZU website">
-      <img src="assets/zuzu-logo.webp" alt="ZUZU Family House">
-    </a>
-    <div class="side-title">Owner control</div>
-    <a class="side-link active" href="#overview">Overview</a>
-    <a class="side-link" href="#reservations">Reservations</a>
-    <a class="side-link" href="#finance">Finance</a>
-    <a class="side-link" href="#marketing">Marketing</a>
-    <a class="side-link" href="#tax">Tax settings</a>
-    <a class="side-link" href="index.html">View website</a>
-  </aside>
-  <main class="admin-main">
-    <div class="admin-notice">Prototype dashboard: data is currently stored only in this browser. Production launch requires authenticated admin access and a real database.</div>
-    <header class="admin-head" id="overview">
-      <div>
-        <h1>ZUZU Owner Dashboard</h1>
-        <p>Bookings, revenue, marketing and configurable reporting.</p>
-      </div>
-      <button class="btn btn-dark" onclick="exportCSV()">Export CSV</button>
-    </header>
+  <div class="admin-shell">
+    <aside class="sidebar">
+      <a class="sidebar-brand" href="index.html" aria-label="View ZUZU website"><span class="sidebar-logo-bg" role="img" aria-label="ZUZU Family House"></span></a>
+      <div class="side-label">Owner Suite</div>
+      <nav class="side-nav">
+        <a class="side-link active" href="#overview"><span>01</span>Overview</a>
+        <a class="side-link" href="#reservations"><span>02</span>Reservations</a>
+        <a class="side-link" href="#finance"><span>03</span>Finance</a>
+        <a class="side-link" href="#marketing"><span>04</span>Marketing</a>
+        <a class="side-link" href="#settings"><span>05</span>Rates & Tax</a>
+      </nav>
+      <div class="sidebar-foot"><span class="status-dot"></span><div><strong>Preview mode</strong><small>Data stored on this device</small></div></div>
+    </aside>
 
-    <section class="kpis">
-      <div class="kpi"><span>Paid revenue</span><strong id="kGross">Rp0</strong><em>Confirmed bookings</em></div>
-      <div class="kpi"><span>Net after logged cost</span><strong id="kNet">Rp0</strong><em>Revenue - ads - expenses</em></div>
-      <div class="kpi"><span>Pending booking value</span><strong id="kPending">Rp0</strong><em>Requests not yet paid</em></div>
-      <div class="kpi"><span>Ad ROAS</span><strong id="kRoas">—</strong><em>Paid revenue ÷ ad spend</em></div>
-    </section>
+    <main class="admin-main">
+      <header class="admin-top" id="overview">
+        <div><div class="admin-eyebrow">ZUZU FAMILY HOUSE / OWNER</div><h1>Business overview</h1><p id="reportPeriod">Current booking data</p></div>
+        <div class="admin-top-actions"><a class="ghost-btn" href="index.html">View website ↗</a><button class="dark-btn" onclick="exportCSV()">Export CSV</button></div>
+      </header>
 
-    <section class="admin-grid">
-      <div class="panel">
-        <h3>Revenue trend</h3>
-        <p style="color:var(--muted);font-size:13px">Current prototype visualization.</p>
-        <div class="bars" id="bars"></div>
-      </div>
-      <div class="panel" id="marketing">
-        <h3>Marketing spend</h3>
-        <div class="marketing-row"><span>Meta Ads</span><strong id="metaSpend">Rp0</strong></div>
-        <div class="marketing-row"><span>Instagram</span><strong id="igSpend">Rp0</strong></div>
-        <div class="marketing-row"><span>Google Ads</span><strong id="googleSpend">Rp0</strong></div>
-        <form id="adsForm" class="admin-form" style="margin-top:14px">
-          <input name="meta" type="number" min="0" placeholder="Meta spend">
-          <input name="instagram" type="number" min="0" placeholder="IG spend">
-          <input name="google" type="number" min="0" placeholder="Google spend">
-          <button class="btn btn-primary" type="submit">Save spend</button>
-        </form>
-      </div>
-    </section>
+      <section class="admin-status-strip"><div><span class="status-dot"></span><strong>System preview</strong></div><p>This dashboard is visually production-ready. Secure login and shared cloud data require the backend connection phase.</p></section>
 
-    <section class="panel" id="reservations" style="margin-top:16px">
-      <h3>Reservations</h3>
-      <div class="table-wrap">
-        <table class="data-table">
-          <thead><tr><th>ID</th><th>Guest</th><th>Check-in</th><th>Check-out</th><th>Guests</th><th>Total</th><th>Source</th><th>Status</th></tr></thead>
-          <tbody id="reservationRows"></tbody>
-        </table>
-      </div>
-    </section>
+      <section class="metric-grid">
+        <article class="metric-card featured"><span>Paid revenue</span><strong id="kGross">Rp0</strong><small>Confirmed bookings</small></article>
+        <article class="metric-card"><span>Net revenue</span><strong id="kNet">Rp0</strong><small>After ads & expenses</small></article>
+        <article class="metric-card"><span>Pending value</span><strong id="kPending">Rp0</strong><small>Open stay requests</small></article>
+        <article class="metric-card"><span>Ad ROAS</span><strong id="kRoas">—</strong><small>Revenue ÷ ad spend</small></article>
+      </section>
 
-    <section class="admin-grid" id="finance">
-      <div class="panel">
-        <h3>Finance snapshot</h3>
-        <div class="finance-row"><span>Paid booking revenue</span><strong id="financeGross">Rp0</strong></div>
-        <div class="finance-row"><span>Advertising</span><strong id="financeAds">Rp0</strong></div>
-        <div class="finance-row"><span>Logged operating expenses</span><strong id="financeExpenses">Rp0</strong></div>
-        <div class="finance-row"><span>Net</span><strong id="financeNet">Rp0</strong></div>
-        <h4>Add expense</h4>
-        <form id="expenseForm" class="admin-form">
-          <input required name="date" type="date">
-          <input required name="category" placeholder="Category">
-          <input required name="amount" type="number" min="0" placeholder="Amount">
-          <button class="btn btn-dark" type="submit">Add expense</button>
-        </form>
-      </div>
-      <div class="panel" id="tax">
-        <h3>Rates & tax settings</h3>
-        <p style="color:var(--muted);font-size:13px">Configure these values only after they are confirmed for the property.</p>
-        <form id="settingsForm">
-          <div class="field"><label>Nightly rate (IDR)</label><input id="nightlyRate" name="nightlyRate" type="number" min="0"></div>
-          <div class="field" style="margin-top:10px"><label>Service rate (%)</label><input id="serviceRate" name="serviceRate" type="number" min="0" step="0.1"></div>
-          <div class="field" style="margin-top:10px"><label>Tax rate (%)</label><input id="taxRate" name="taxRate" type="number" min="0" step="0.1"></div>
-          <button class="btn btn-primary btn-block" style="margin-top:14px" type="submit">Save settings</button>
-        </form>
-      </div>
-    </section>
-  </main>
-</div>
-<script src="admin.js"></script>
+      <section class="admin-content-grid">
+        <article class="admin-panel wide-panel">
+          <div class="panel-head"><div><span class="panel-kicker">Performance</span><h2>Revenue movement</h2></div><span class="data-note">Last 6 months</span></div>
+          <div class="revenue-chart" id="revenueChart"></div>
+        </article>
+        <article class="admin-panel" id="marketing">
+          <div class="panel-head"><div><span class="panel-kicker">Acquisition</span><h2>Marketing spend</h2></div></div>
+          <div class="channel-list"><div><span>Meta Ads</span><strong id="metaSpend">Rp0</strong></div><div><span>Instagram</span><strong id="igSpend">Rp0</strong></div><div><span>Google Ads</span><strong id="googleSpend">Rp0</strong></div></div>
+          <form id="adsForm" class="admin-form compact-form"><input name="meta" type="number" min="0" placeholder="Meta spend"><input name="instagram" type="number" min="0" placeholder="Instagram spend"><input name="google" type="number" min="0" placeholder="Google spend"><button class="save-btn" type="submit">Save ad spend</button></form>
+        </article>
+      </section>
+
+      <section class="admin-panel reservations-panel" id="reservations">
+        <div class="panel-head"><div><span class="panel-kicker">Guest ledger</span><h2>Reservations</h2></div><span class="data-note" id="reservationCount">0 records</span></div>
+        <div class="table-wrap"><table class="data-table"><thead><tr><th>Reference</th><th>Guest</th><th>Stay</th><th>Guests</th><th>Total</th><th>Source</th><th>Status</th></tr></thead><tbody id="reservationRows"></tbody></table></div>
+      </section>
+
+      <section class="admin-content-grid" id="finance">
+        <article class="admin-panel wide-panel">
+          <div class="panel-head"><div><span class="panel-kicker">Finance</span><h2>Revenue & costs</h2></div></div>
+          <div class="finance-grid"><div><span>Paid booking revenue</span><strong id="financeGross">Rp0</strong></div><div><span>Advertising</span><strong id="financeAds">Rp0</strong></div><div><span>Operating expenses</span><strong id="financeExpenses">Rp0</strong></div><div class="finance-net"><span>Net</span><strong id="financeNet">Rp0</strong></div></div>
+          <div class="section-divider"></div>
+          <div class="subsection-title"><div><span class="panel-kicker">Expense log</span><h3>Add operating expense</h3></div></div>
+          <form id="expenseForm" class="admin-form expense-form"><input required name="date" type="date"><input required name="category" placeholder="Category"><input required name="amount" type="number" min="0" placeholder="Amount (IDR)"><button class="dark-btn" type="submit">Add expense</button></form>
+          <div class="expense-list" id="expenseList"></div>
+        </article>
+        <article class="admin-panel" id="settings">
+          <div class="panel-head"><div><span class="panel-kicker">Controls</span><h2>Rates & tax</h2></div></div>
+          <form id="settingsForm" class="settings-form">
+            <label>Nightly rate (IDR)<input id="nightlyRate" name="nightlyRate" type="number" min="0"></label>
+            <label>Service rate (%)<input id="serviceRate" name="serviceRate" type="number" min="0" step="0.1"></label>
+            <label>Tax rate (%)<input id="taxRate" name="taxRate" type="number" min="0" step="0.1"></label>
+            <button class="save-btn" type="submit">Save pricing settings</button>
+          </form>
+          <p class="admin-disclaimer">Tax settings are configurable and should be confirmed with the client’s accountant before production use.</p>
+        </article>
+      </section>
+    </main>
+  </div>
+  <script src="admin.js"></script>
 </body>
 </html>
