@@ -1,7 +1,7 @@
 const IDR = new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0});
 const DEFAULT_RATE = 3500000;
 const DEFAULT_SERVICE = 0.05;
-const DEFAULT_TAX = 0.00; // configure with accountant / applicable local rules
+const DEFAULT_TAX = 0.00;
 function nightsBetween(a,b){if(!a||!b)return 0;const d1=new Date(a+'T00:00:00');const d2=new Date(b+'T00:00:00');return Math.max(0,Math.round((d2-d1)/86400000));}
 function getSettings(){return JSON.parse(localStorage.getItem('zuzu_settings')||'null')||{nightlyRate:DEFAULT_RATE,serviceRate:DEFAULT_SERVICE,taxRate:DEFAULT_TAX};}
 function updateSummary(){
