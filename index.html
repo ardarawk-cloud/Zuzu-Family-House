@@ -46,8 +46,8 @@
 
   <section class="availability" id="availability" aria-label="Check stay dates">
     <div class="container availability-card">
-      <div class="field"><label for="checkin">Arrival</label><div class="date-input-wrap"><input type="date" id="checkin"><span class="date-placeholder">Select date</span></div></div>
-      <div class="field"><label for="checkout">Departure</label><div class="date-input-wrap"><input type="date" id="checkout"><span class="date-placeholder">Select date</span></div></div>
+      <div class="field"><label for="checkin">Check-in</label><div class="date-input-wrap"><input type="date" id="checkin"><span class="date-placeholder">Select date</span></div></div>
+      <div class="field"><label for="checkout">Check-out</label><div class="date-input-wrap"><input type="date" id="checkout"><span class="date-placeholder">Select date</span></div></div>
       <div class="field"><label for="guests">Guests</label><select id="guests"><option value="1">1 guest</option><option value="2" selected>2 guests</option><option value="3">3 guests</option><option value="4">4 guests</option><option value="5">5 guests</option><option value="6">6 guests</option></select></div>
       <button id="checkAvailability" class="check-button" type="button">Check stay <span>→</span></button>
     </div>
@@ -91,10 +91,10 @@
       <div class="modal-head"><div class="eyebrow">Reservations</div><h2 id="bookingTitle">Reserve ZUZU.</h2><p>Choose your stay dates, review the estimate and send a direct reservation request.</p></div>
       <div class="modal-grid">
         <form id="bookingForm" class="booking-form">
-          <div class="selected-stay" id="selectedStay"><span>Your stay</span><strong>Select arrival and departure below</strong></div>
+          <div class="selected-stay" id="selectedStay"><span>Your stay</span><strong>Select check-in and check-out below</strong></div>
           <div class="form-grid">
-            <div class="field"><label for="modalCheckin">Arrival</label><input type="date" id="modalCheckin" aria-label="Arrival date"></div>
-            <div class="field"><label for="modalCheckout">Departure</label><input type="date" id="modalCheckout" aria-label="Departure date"></div>
+            <div class="field"><label for="modalCheckin">Check-in</label><input type="date" id="modalCheckin" aria-label="Check-in date"></div>
+            <div class="field"><label for="modalCheckout">Check-out</label><input type="date" id="modalCheckout" aria-label="Check-out date"></div>
             <div class="field"><label for="guestName">Full name</label><input required id="guestName" name="name" autocomplete="name" placeholder="Your full name"></div>
             <div class="field"><label for="guestEmail">Email</label><input required id="guestEmail" type="email" name="email" autocomplete="email" placeholder="you@email.com"></div>
             <div class="field"><label for="guestPhone">WhatsApp / phone</label><input required id="guestPhone" name="phone" autocomplete="tel" placeholder="+62 ..."></div>
@@ -107,6 +107,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=8"></script>
+  <script src="app.js?v=9"></script>
 </body>
 </html>
