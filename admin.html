@@ -9,91 +9,101 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="admin-premium.css?v=7">
-  <link rel="stylesheet" href="admin-logo-fix.css?v=7">
+  <link rel="stylesheet" href="admin-premium.css?v=8">
 </head>
 <body class="admin-body">
   <div class="admin-shell">
     <aside class="sidebar">
-      <a class="sidebar-brand" href="index.html" aria-label="View ZUZU website"><span class="sidebar-logo-bg" role="img" aria-label="ZUZU Family House"></span></a>
+      <a class="sidebar-brand" href="index.html" aria-label="View ZUZU website">
+        <strong>ZUZU</strong><span>FAMILY HOUSE</span><small>PERERENAN · BALI</small>
+      </a>
       <div class="side-label">Owner Suite</div>
-      <nav class="side-nav" id="sideNav">
+      <nav class="side-nav">
         <a class="side-link active" href="#overview" data-view="overview"><span>01</span>Overview</a>
         <a class="side-link" href="#reservations" data-view="reservations"><span>02</span>Reservations</a>
         <a class="side-link" href="#finance" data-view="finance"><span>03</span>Finance</a>
         <a class="side-link" href="#marketing" data-view="marketing"><span>04</span>Marketing</a>
         <a class="side-link" href="#settings" data-view="settings"><span>05</span>Rates & Tax</a>
       </nav>
-      <div class="sidebar-foot"><span class="status-dot"></span><div><strong>Presentation mode</strong><small>Demo data · this device only</small></div></div>
+      <div class="sidebar-foot"><span class="status-dot"></span><div><strong>Presentation mode</strong><small>Sample data · this device</small></div></div>
     </aside>
 
     <main class="admin-main">
-      <header class="admin-top" id="overview">
-        <div><div class="admin-eyebrow">ZUZU FAMILY HOUSE / OWNER</div><h1>Business overview</h1><p id="reportPeriod">Presentation dashboard</p></div>
-        <div class="admin-top-actions"><a class="ghost-btn" href="index.html">View website ↗</a><button class="ghost-btn" id="loadDemoBtn" type="button">Load demo</button><button class="dark-btn" onclick="exportCSV()">Export CSV</button></div>
+      <header class="admin-top">
+        <div><div class="admin-eyebrow">ZUZU FAMILY HOUSE / OWNER</div><h1 id="viewTitle">Business overview</h1><p id="reportPeriod">Presentation dashboard</p></div>
+        <div class="admin-top-actions"><a class="ghost-btn" href="index.html">Website ↗</a><button class="ghost-btn" id="loadDemoBtn" type="button">Load demo</button><button class="dark-btn" onclick="exportCSV()">Export CSV</button></div>
       </header>
 
-      <section class="admin-status-strip"><div><span class="status-dot"></span><strong>Client presentation</strong></div><p>Sample figures and guest names are fictional. Production will use secure login, shared cloud data and live booking records.</p></section>
+      <div class="preview-note"><span class="status-dot"></span><div><strong>Client presentation</strong><p>Sample figures and guest names are fictional. Production will use secure login, shared cloud data and live booking records.</p></div></div>
 
-      <section class="metric-grid dashboard-view" data-view-panel="overview">
-        <article class="metric-card featured"><span>Paid revenue</span><strong id="kGross">Rp0</strong><small>Confirmed bookings</small></article>
-        <article class="metric-card"><span>Net revenue</span><strong id="kNet">Rp0</strong><small>After ads & expenses</small></article>
-        <article class="metric-card"><span>Pending value</span><strong id="kPending">Rp0</strong><small>Open stay requests</small></article>
-        <article class="metric-card"><span>Ad ROAS</span><strong id="kRoas">—</strong><small>Revenue ÷ ad spend</small></article>
+      <section class="admin-view" id="view-overview">
+        <div class="metric-grid">
+          <article class="metric-card featured"><span>Paid revenue</span><strong id="kGross">Rp0</strong><small>Confirmed bookings</small></article>
+          <article class="metric-card"><span>Net revenue</span><strong id="kNet">Rp0</strong><small>After ads & expenses</small></article>
+          <article class="metric-card"><span>Pending value</span><strong id="kPending">Rp0</strong><small>Open stay requests</small></article>
+          <article class="metric-card"><span>Ad ROAS</span><strong id="kRoas">—</strong><small>Revenue ÷ ad spend</small></article>
+        </div>
+
+        <div class="overview-grid">
+          <article class="admin-panel">
+            <div class="panel-head"><div><span class="panel-kicker">Performance</span><h2>Revenue movement</h2></div><span class="data-note">Last 6 months</span></div>
+            <div class="revenue-chart" id="revenueChart"></div>
+          </article>
+          <article class="admin-panel">
+            <div class="panel-head"><div><span class="panel-kicker">Snapshot</span><h2>Stay activity</h2></div></div>
+            <div class="snapshot-list"><div><span>Paid bookings</span><strong id="kPaidCount">0</strong></div><div><span>Pending requests</span><strong id="kPendingCount">0</strong></div><div><span>Configured nightly</span><strong id="kNightly">Rp0</strong></div></div>
+          </article>
+        </div>
+
+        <article class="admin-panel recent-panel">
+          <div class="panel-head"><div><span class="panel-kicker">Guest activity</span><h2>Latest reservations</h2></div><button class="text-btn" type="button" data-go="reservations">View all →</button></div>
+          <div class="recent-list" id="recentReservations"></div>
+        </article>
       </section>
 
-      <section class="admin-content-grid dashboard-view" data-view-panel="overview">
-        <article class="admin-panel wide-panel">
-          <div class="panel-head"><div><span class="panel-kicker">Performance</span><h2>Revenue movement</h2></div><span class="data-note">Last 6 months</span></div>
-          <div class="revenue-chart" id="revenueChart"></div>
-        </article>
+      <section class="admin-view" id="view-reservations" hidden>
         <article class="admin-panel">
-          <div class="panel-head"><div><span class="panel-kicker">Today</span><h2>Latest requests</h2></div><span class="data-note" id="latestCount">0 open</span></div>
-          <div class="latest-list" id="latestList"></div>
+          <div class="panel-head"><div><span class="panel-kicker">Guest ledger</span><h2>Reservations</h2></div><span class="data-note" id="reservationCount">0 records</span></div>
+          <div class="table-tools"><input id="reservationSearch" type="search" placeholder="Search guest or reference"><select id="reservationFilter"><option value="All">All statuses</option><option value="Pending">Pending</option><option value="Paid">Paid</option><option value="Cancelled">Cancelled</option></select></div>
+          <div class="table-wrap"><table class="data-table"><thead><tr><th>Reference</th><th>Guest</th><th>Stay</th><th>Guests</th><th>Total</th><th>Source</th><th>Status</th></tr></thead><tbody id="reservationRows"></tbody></table></div>
         </article>
       </section>
 
-      <section class="admin-panel reservations-panel dashboard-view" id="reservations" data-view-panel="reservations">
-        <div class="panel-head responsive-head"><div><span class="panel-kicker">Guest ledger</span><h2>Reservations</h2></div><span class="data-note" id="reservationCount">0 records</span></div>
-        <div class="reservation-tools"><input id="reservationSearch" type="search" placeholder="Search guest or reference"><select id="statusFilter"><option value="all">All statuses</option><option value="Pending">Pending</option><option value="Paid">Paid</option><option value="Cancelled">Cancelled</option></select></div>
-        <div class="table-wrap"><table class="data-table"><thead><tr><th>Reference</th><th>Guest</th><th>Stay</th><th>Guests</th><th>Total</th><th>Source</th><th>Status</th></tr></thead><tbody id="reservationRows"></tbody></table></div>
-      </section>
-
-      <section class="admin-content-grid dashboard-view" id="finance" data-view-panel="finance">
-        <article class="admin-panel wide-panel">
+      <section class="admin-view" id="view-finance" hidden>
+        <article class="admin-panel">
           <div class="panel-head"><div><span class="panel-kicker">Finance</span><h2>Revenue & costs</h2></div></div>
           <div class="finance-grid"><div><span>Paid booking revenue</span><strong id="financeGross">Rp0</strong></div><div><span>Advertising</span><strong id="financeAds">Rp0</strong></div><div><span>Operating expenses</span><strong id="financeExpenses">Rp0</strong></div><div class="finance-net"><span>Net</span><strong id="financeNet">Rp0</strong></div></div>
           <div class="section-divider"></div>
-          <div class="subsection-title"><div><span class="panel-kicker">Expense log</span><h3>Add operating expense</h3></div></div>
-          <form id="expenseForm" class="admin-form expense-form"><input required name="date" type="date"><input required name="category" placeholder="Category"><input required name="amount" type="number" min="0" placeholder="Amount (IDR)"><button class="dark-btn" type="submit">Add expense</button></form>
+          <div class="subsection-title"><span class="panel-kicker">Expense log</span><h3>Add operating expense</h3></div>
+          <form id="expenseForm" class="admin-form expense-form"><input required name="date" type="date"><input required name="category" placeholder="Category"><input required name="amount" type="number" min="0" placeholder="Amount (IDR)"><button class="dark-btn form-submit" type="submit">Add expense</button></form>
           <div class="expense-list" id="expenseList"></div>
         </article>
       </section>
 
-      <section class="admin-content-grid dashboard-view" id="marketing" data-view-panel="marketing">
-        <article class="admin-panel wide-panel">
-          <div class="panel-head"><div><span class="panel-kicker">Acquisition</span><h2>Marketing performance</h2></div><span class="data-note">Direct attribution preview</span></div>
-          <div class="channel-list channel-cards"><div><span>Meta Ads</span><strong id="metaSpend">Rp0</strong></div><div><span>Instagram</span><strong id="igSpend">Rp0</strong></div><div><span>Google Ads</span><strong id="googleSpend">Rp0</strong></div></div>
-          <form id="adsForm" class="admin-form ads-form"><input name="meta" type="number" min="0" placeholder="Meta spend"><input name="instagram" type="number" min="0" placeholder="Instagram spend"><input name="google" type="number" min="0" placeholder="Google spend"><button class="save-btn" type="submit">Save ad spend</button></form>
-        </article>
+      <section class="admin-view" id="view-marketing" hidden>
+        <div class="marketing-grid">
+          <article class="admin-panel">
+            <div class="panel-head"><div><span class="panel-kicker">Acquisition</span><h2>Marketing spend</h2></div><span class="data-note">Campaign preview</span></div>
+            <div class="channel-list"><div><span>Meta Ads</span><strong id="metaSpend">Rp0</strong></div><div><span>Instagram</span><strong id="igSpend">Rp0</strong></div><div><span>Google Ads</span><strong id="googleSpend">Rp0</strong></div></div>
+            <form id="adsForm" class="admin-form"><label>Meta Ads<input name="meta" type="number" min="0"></label><label>Instagram<input name="instagram" type="number" min="0"></label><label>Google Ads<input name="google" type="number" min="0"></label><button class="save-btn" type="submit">Save ad spend</button></form>
+          </article>
+          <article class="admin-panel info-panel"><span class="panel-kicker">Attribution</span><h2>Know what actually drives bookings.</h2><p>Production can connect UTM tracking, Meta, Instagram and Google campaign data so the owner can compare spend, booking source and ROAS in one place.</p></article>
+        </div>
       </section>
 
-      <section class="admin-content-grid dashboard-view" id="settings" data-view-panel="settings">
-        <article class="admin-panel settings-panel">
-          <div class="panel-head"><div><span class="panel-kicker">Controls</span><h2>Rates & tax</h2></div></div>
-          <form id="settingsForm" class="settings-form">
-            <label>Nightly rate (IDR)<input id="nightlyRate" name="nightlyRate" type="number" min="0"></label>
-            <label>Service rate (%)<input id="serviceRate" name="serviceRate" type="number" min="0" step="0.1"></label>
-            <label>Tax rate (%)<input id="taxRate" name="taxRate" type="number" min="0" step="0.1"></label>
-            <button class="save-btn" type="submit">Save pricing settings</button>
-          </form>
-          <p class="admin-disclaimer">Tax settings remain configurable and should be confirmed with the client’s accountant before production use.</p>
-        </article>
+      <section class="admin-view" id="view-settings" hidden>
+        <div class="settings-grid">
+          <article class="admin-panel">
+            <div class="panel-head"><div><span class="panel-kicker">Controls</span><h2>Rates & tax</h2></div></div>
+            <form id="settingsForm" class="settings-form"><label>Nightly rate (IDR)<input id="nightlyRate" name="nightlyRate" type="number" min="0"></label><label>Service rate (%)<input id="serviceRate" name="serviceRate" type="number" min="0" step="0.1"></label><label>Tax rate (%)<input id="taxRate" name="taxRate" type="number" min="0" step="0.1"></label><button class="save-btn" type="submit">Save pricing settings</button></form>
+          </article>
+          <article class="admin-panel info-panel"><span class="panel-kicker">Production note</span><h2>Pricing stays under owner control.</h2><p>Nightly rates, service and tax remain configurable. Final tax treatment and booking rules should be confirmed with the client before the production launch.</p></article>
+        </div>
       </section>
-      <div class="admin-toast" id="adminToast" role="status"></div>
+
+      <div class="toast" id="toast" role="status"></div>
     </main>
   </div>
-  <script src="admin.js?v=7"></script>
+  <script src="admin.js?v=8"></script>
 </body>
 </html>
