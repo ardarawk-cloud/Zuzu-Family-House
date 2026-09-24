@@ -1,3 +1,3 @@
 window.ZUZU_CONFIG = Object.freeze({
-  apiBase: ''
+  apiBase: 'https://zuzu-api.nadmo.id'
 });
