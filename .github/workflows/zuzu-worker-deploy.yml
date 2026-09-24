@@ -1,0 +1,36 @@
+name: Deploy ZUZU Production API
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "backend/**"
+      - "migrations/**"
+      - "wrangler.toml"
+      - ".github/workflows/zuzu-worker-deploy.yml"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install Wrangler
+        run: npm install -g wrangler
+      - name: Configure D1 binding
+        run: sed -i "s/REPLACE_WITH_CLOUDFLARE_D1_DATABASE_ID/${{ secrets.CLOUDFLARE_D1_DATABASE_ID }}/" wrangler.toml
+      - name: Apply database schema
+        run: wrangler d1 execute zuzu-prod --remote --file=./migrations/0001_init.sql
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Deploy Worker
+        run: wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
