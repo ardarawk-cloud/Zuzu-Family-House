@@ -2,13 +2,6 @@ name: Deploy ZUZU Production API
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - "backend/**"
-      - "migrations/**"
-      - "wrangler.toml"
-      - ".github/workflows/zuzu-worker-deploy.yml"
 
 jobs:
   deploy:
