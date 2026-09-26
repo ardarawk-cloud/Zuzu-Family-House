@@ -11,6 +11,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="admin-premium.css?v=8">
   <link rel="stylesheet" href="admin-desktop.css?v=3">
+  <style id="admin-auth-style">
+    .admin-auth{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;padding:24px;background:rgba(9,24,20,.82);backdrop-filter:blur(12px)}
+    .admin-auth[hidden]{display:none}.admin-auth-card{width:min(430px,100%);background:#fff;border-radius:22px;padding:30px;box-shadow:0 30px 80px rgba(0,0,0,.28)}
+    .admin-auth-card span{font:700 11px/1.2 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#9b6c21}.admin-auth-card h2{margin:8px 0 8px;color:#10241f;font:700 34px/1 Cormorant Garamond,serif}
+    .admin-auth-card p{margin:0 0 18px;color:#66736e;font:500 13px/1.55 Manrope,sans-serif}.admin-auth-card input{width:100%;height:48px;box-sizing:border-box;border:1px solid #d9dedb;border-radius:11px;padding:0 13px;font:600 14px Manrope,sans-serif}
+    .admin-auth-card button{width:100%;margin-top:12px;height:48px;border:0;border-radius:11px;background:#10241f;color:#fff;font:700 13px Manrope,sans-serif;cursor:pointer}
+  </style>
 </head>
 <body class="admin-body">
   <div class="admin-shell">
@@ -26,16 +33,16 @@
         <a class="side-link" href="#marketing" data-view="marketing"><span>04</span>Marketing</a>
         <a class="side-link" href="#settings" data-view="settings"><span>05</span>Rates & Tax</a>
       </nav>
-      <div class="sidebar-foot"><span class="status-dot"></span><div><strong>Presentation mode</strong><small>Sample data · this device</small></div></div>
+      <div class="sidebar-foot"><span class="status-dot"></span><div><strong>Production live</strong><small>Cloudflare D1 · shared data</small></div></div>
     </aside>
 
     <main class="admin-main">
       <header class="admin-top">
         <div><div class="admin-eyebrow">ZUZU FAMILY HOUSE / OWNER</div><h1 id="viewTitle">Business overview</h1><p id="reportPeriod">Presentation dashboard</p></div>
-        <div class="admin-top-actions"><a class="ghost-btn" href="index.html">Website ↗</a><button class="ghost-btn" id="loadDemoBtn" type="button">Load demo</button><button class="dark-btn" onclick="exportCSV()">Export CSV</button></div>
+        <div class="admin-top-actions"><a class="ghost-btn" href="index.html">Website ↗</a><button class="ghost-btn" id="logoutBtn" type="button">Sign out</button><button class="dark-btn" onclick="exportCSV()">Export CSV</button></div>
       </header>
 
-      <div class="preview-note"><span class="status-dot"></span><div><strong>Client presentation</strong><p>Sample figures and guest names are fictional. Production will use secure login, shared cloud data and live booking records.</p></div></div>
+      <div class="preview-note"><span class="status-dot"></span><div><strong>Live production dashboard</strong><p>Reservations, pricing, expenses and marketing spend are loaded from the shared ZUZU production database.</p></div></div>
 
       <section class="admin-view" id="view-overview">
         <div class="metric-grid">
@@ -65,7 +72,7 @@
       <section class="admin-view" id="view-reservations" hidden>
         <article class="admin-panel">
           <div class="panel-head"><div><span class="panel-kicker">Guest ledger</span><h2>Reservations</h2></div><span class="data-note" id="reservationCount">0 records</span></div>
-          <div class="table-tools"><input id="reservationSearch" type="search" placeholder="Search guest or reference"><select id="reservationFilter"><option value="All">All statuses</option><option value="Pending">Pending</option><option value="Paid">Paid</option><option value="Cancelled">Cancelled</option></select></div>
+          <div class="table-tools"><input id="reservationSearch" type="search" placeholder="Search guest or reference"><select id="reservationFilter"><option value="All">All statuses</option><option value="Pending">Pending</option><option value="Confirmed">Confirmed</option><option value="Paid">Paid</option><option value="Cancelled">Cancelled</option></select></div>
           <div class="table-wrap"><table class="data-table"><thead><tr><th>Reference</th><th>Guest</th><th>Stay</th><th>Guests</th><th>Total</th><th>Source</th><th>Status</th></tr></thead><tbody id="reservationRows"></tbody></table></div>
         </article>
       </section>
@@ -105,6 +112,16 @@
       <div class="toast" id="toast" role="status"></div>
     </main>
   </div>
-  <script src="admin.js?v=8"></script>
+  <div class="admin-auth" id="adminAuth">
+    <form class="admin-auth-card" id="adminAuthForm">
+      <span>Owner access</span>
+      <h2>ZUZU Owner Suite</h2>
+      <p id="adminAuthMessage">Enter the owner access token to load live ZUZU data.</p>
+      <input id="adminToken" type="password" autocomplete="current-password" placeholder="Owner access token" required>
+      <button type="submit">Open dashboard</button>
+    </form>
+  </div>
+  <script src="config.js?v=2"></script>
+  <script src="admin.js?v=9"></script>
 </body>
 </html>
