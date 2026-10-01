@@ -32,6 +32,7 @@
         <a class="side-link" href="#finance" data-view="finance"><span>03</span>Finance</a>
         <a class="side-link" href="#marketing" data-view="marketing"><span>04</span>Marketing</a>
         <a class="side-link" href="#settings" data-view="settings"><span>05</span>Rates & Tax</a>
+        <a class="side-link" href="#channels" data-view="channels"><span>06</span>Channels</a>
       </nav>
       <div class="sidebar-foot"><span class="status-dot"></span><div><strong>Production live</strong><small>Cloudflare D1 · shared data</small></div></div>
     </aside>
@@ -109,6 +110,38 @@
         </div>
       </section>
 
+      <section class="admin-view" id="view-channels" hidden>
+        <div class="settings-grid">
+          <article class="admin-panel">
+            <div class="panel-head"><div><span class="panel-kicker">OTA calendar sync</span><h2>Airbnb & booking channels</h2></div><span class="data-note">iCal</span></div>
+            <p style="color:#6d6b63;font-size:13px;line-height:1.7;margin:0 0 18px">Paste the iCal export URL from Airbnb, Booking.com or another OTA. ZUZU will import occupied dates and block direct reservations.</p>
+            <form id="otaFeedForm" class="admin-form">
+              <label>Channel<select name="provider" required><option>Airbnb</option><option>Booking.com</option><option>Agoda</option><option>Other</option></select></label>
+              <label>Label<input name="label" required placeholder="e.g. ZUZU Airbnb"></label>
+              <label style="grid-column:1/-1">iCal URL<input name="feedUrl" required type="url" placeholder="https://...calendar.ics"></label>
+              <button class="save-btn" type="submit">Add calendar feed</button>
+            </form>
+            <div class="section-divider"></div>
+            <div id="otaFeedList" class="expense-list"></div>
+          </article>
+
+          <article class="admin-panel info-panel">
+            <span class="panel-kicker">ZUZU calendar export</span>
+            <h2>Send direct bookings back to OTA calendars.</h2>
+            <p>Use this URL as the external calendar/import calendar inside supported OTA platforms:</p>
+            <div style="display:flex;gap:8px;align-items:center;margin-top:14px">
+              <input id="zuzuCalendarUrl" readonly value="https://zuzu-api.nadmo.id/calendar.ics" style="width:100%;height:44px;border:1px solid #ded5c6;border-radius:11px;padding:0 12px;background:#fff">
+              <button id="copyCalendarUrl" class="ghost-btn" type="button">Copy</button>
+            </div>
+            <div class="section-divider"></div>
+            <span class="panel-kicker">Handover cleanup</span>
+            <h2>Clear test business data.</h2>
+            <p>This removes reservation test records, expense logs and advertising spend. Pricing, seasonal rates, blocked dates and OTA feeds are kept.</p>
+            <button id="handoverResetBtn" class="dark-btn" type="button" style="margin-top:12px">Reset test data</button>
+          </article>
+        </div>
+      </section>
+
       <div class="toast" id="toast" role="status"></div>
     </main>
   </div>
@@ -122,6 +155,6 @@
     </form>
   </div>
   <script src="config.js?v=2"></script>
-  <script src="admin.js?v=9"></script>
+  <script src="admin.js?v=10"></script>
 </body>
 </html>
