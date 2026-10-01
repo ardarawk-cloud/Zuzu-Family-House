@@ -83,10 +83,19 @@ async function availability(env, checkin, checkout) {
      LIMIT 1`
   ).bind(checkin, checkout).first();
 
+  const ota = await env.DB.prepare(
+    `SELECT ob.id, ob.summary, f.provider, f.label
+     FROM ota_blocks ob
+     JOIN ota_feeds f ON f.id = ob.feed_id
+     WHERE f.active = 1 AND ob.start_date < ?2 AND ob.end_date > ?1
+     LIMIT 1`
+  ).bind(checkin, checkout).first();
+
   return {
-    available: !reservation && !block,
+    available: !reservation && !block && !ota,
     conflict: reservation ? { type: 'reservation', id: reservation.id } :
-      block ? { type: 'block', id: block.id, source: block.source } : null
+      block ? { type: 'block', id: block.id, source: block.source } :
+      ota ? { type: 'ota', id: ota.id, source: ota.provider, label: ota.label } : null
   };
 }
 
@@ -324,6 +333,159 @@ async function adRoutes(request, env) {
   return json(request, env, { ok: true, ads: { meta, instagram, google } });
 }
 
+
+function icsEscape(value) {
+  return String(value || '').replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replace(/,/g, '\\,').replace(/;/g, '\\;');
+}
+
+function icsDate(value) {
+  return String(value || '').replace(/-/g, '').slice(0, 8);
+}
+
+function parseIcsDate(value) {
+  const raw = String(value || '').trim();
+  const m = raw.match(/^(\d{4})(\d{2})(\d{2})/);
+  return m ? `${m[1]}-${m[2]}-${m[3]}` : '';
+}
+
+function parseIcalEvents(text) {
+  const unfolded = String(text || '').replace(/\r?\n[ \t]/g, '');
+  const chunks = unfolded.split('BEGIN:VEVENT').slice(1);
+  const events = [];
+  for (const chunk of chunks) {
+    const body = chunk.split('END:VEVENT')[0] || '';
+    const lines = body.split(/\r?\n/);
+    const pick = name => {
+      const line = lines.find(v => v.toUpperCase().startsWith(name + ':') || v.toUpperCase().startsWith(name + ';'));
+      if (!line) return '';
+      return line.slice(line.indexOf(':') + 1).trim();
+    };
+    const start = parseIcsDate(pick('DTSTART'));
+    const end = parseIcsDate(pick('DTEND'));
+    if (!start || !end || end <= start) continue;
+    events.push({
+      uid: (pick('UID') || crypto.randomUUID()).slice(0, 240),
+      start,
+      end,
+      summary: pick('SUMMARY').slice(0, 240)
+    });
+  }
+  return events;
+}
+
+async function publicCalendar(request, env) {
+  const [{ results: reservations }, { results: blocks }] = await Promise.all([
+    env.DB.prepare(
+      `SELECT id, checkin, checkout, name FROM reservations
+       WHERE status IN ('Confirmed','Paid') ORDER BY checkin`
+    ).all(),
+    env.DB.prepare(
+      `SELECT id, start_date, end_date, source, note FROM blocked_dates ORDER BY start_date`
+    ).all()
+  ]);
+  const lines = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//ZUZU Family House//Availability//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'X-WR-CALNAME:ZUZU Family House'
+  ];
+  for (const r of reservations || []) {
+    lines.push('BEGIN:VEVENT');
+    lines.push('UID:' + icsEscape(r.id) + '@zuzu.nadmo.id');
+    lines.push('DTSTART;VALUE=DATE:' + icsDate(r.checkin));
+    lines.push('DTEND;VALUE=DATE:' + icsDate(r.checkout));
+    lines.push('SUMMARY:' + icsEscape('Reserved - ZUZU Family House'));
+    lines.push('END:VEVENT');
+  }
+  for (const b of blocks || []) {
+    lines.push('BEGIN:VEVENT');
+    lines.push('UID:block-' + b.id + '@zuzu.nadmo.id');
+    lines.push('DTSTART;VALUE=DATE:' + icsDate(b.start_date));
+    lines.push('DTEND;VALUE=DATE:' + icsDate(b.end_date));
+    lines.push('SUMMARY:' + icsEscape(b.note || b.source || 'Blocked'));
+    lines.push('END:VEVENT');
+  }
+  lines.push('END:VCALENDAR');
+  return new Response(lines.join('\r\n') + '\r\n', {
+    status: 200,
+    headers: {
+      'Content-Type': 'text/calendar; charset=utf-8',
+      'Content-Disposition': 'inline; filename="zuzu-availability.ics"',
+      ...corsHeaders(request, env)
+    }
+  });
+}
+
+async function otaFeeds(request, env) {
+  if (request.method === 'GET') {
+    const { results } = await env.DB.prepare(
+      'SELECT id,label,provider,feed_url,active,last_synced_at,last_error,created_at FROM ota_feeds ORDER BY id DESC'
+    ).all();
+    return json(request, env, { ok: true, feeds: results || [] });
+  }
+  const body = await request.json().catch(() => null);
+  const label = String(body?.label || '').trim().slice(0, 80);
+  const provider = String(body?.provider || 'Other').trim().slice(0, 40);
+  const feedUrl = String(body?.feedUrl || '').trim();
+  if (!label || !/^https:\/\//i.test(feedUrl)) return bad(request, env, 'Label and HTTPS iCal URL are required.');
+  const result = await env.DB.prepare(
+    'INSERT INTO ota_feeds(label,provider,feed_url,active) VALUES(?1,?2,?3,1)'
+  ).bind(label, provider, feedUrl).run();
+  return json(request, env, { ok: true, id: result.meta?.last_row_id }, 201);
+}
+
+async function syncOtaFeed(request, env, id) {
+  const feed = await env.DB.prepare('SELECT * FROM ota_feeds WHERE id=?1').bind(id).first();
+  if (!feed) return bad(request, env, 'OTA feed not found.', 404);
+  try {
+    const res = await fetch(feed.feed_url, { headers: { 'User-Agent': 'ZUZU-Calendar-Sync/1.0' } });
+    if (!res.ok) throw new Error('Feed returned HTTP ' + res.status);
+    const text = await res.text();
+    const events = parseIcalEvents(text);
+    const statements = [
+      env.DB.prepare('DELETE FROM ota_blocks WHERE feed_id=?1').bind(id)
+    ];
+    for (const e of events) {
+      statements.push(
+        env.DB.prepare(
+          'INSERT OR IGNORE INTO ota_blocks(feed_id,external_uid,start_date,end_date,summary) VALUES(?1,?2,?3,?4,?5)'
+        ).bind(id, e.uid, e.start, e.end, e.summary)
+      );
+    }
+    if (statements.length) await env.DB.batch(statements);
+    const now = new Date().toISOString();
+    await env.DB.prepare(
+      'UPDATE ota_feeds SET last_synced_at=?2,last_error=NULL WHERE id=?1'
+    ).bind(id, now).run();
+    return json(request, env, { ok: true, id: Number(id), imported: events.length, lastSyncedAt: now });
+  } catch (error) {
+    await env.DB.prepare(
+      'UPDATE ota_feeds SET last_error=?2 WHERE id=?1'
+    ).bind(id, String(error?.message || error).slice(0, 300)).run();
+    return bad(request, env, 'Unable to sync OTA calendar: ' + String(error?.message || error), 502);
+  }
+}
+
+async function deleteOtaFeed(request, env, id) {
+  await env.DB.prepare('DELETE FROM ota_blocks WHERE feed_id=?1').bind(id).run();
+  const result = await env.DB.prepare('DELETE FROM ota_feeds WHERE id=?1').bind(id).run();
+  if (!result.meta?.changes) return bad(request, env, 'OTA feed not found.', 404);
+  return json(request, env, { ok: true });
+}
+
+async function handoverReset(request, env) {
+  const body = await request.json().catch(() => null);
+  if (String(body?.confirm || '') !== 'RESET ZUZU') return bad(request, env, 'Reset confirmation is invalid.');
+  await env.DB.batch([
+    env.DB.prepare('DELETE FROM reservations'),
+    env.DB.prepare('DELETE FROM expenses'),
+    env.DB.prepare('UPDATE ad_spend SET meta=0, instagram=0, google=0, updated_at=?1 WHERE id=1').bind(new Date().toISOString())
+  ]);
+  return json(request, env, { ok: true, reset: ['reservations','expenses','ad_spend'], kept: ['settings','seasonal_rates','blocked_dates','ota_feeds'] });
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -336,6 +498,7 @@ export default {
       if (url.pathname === '/api/public/settings' && request.method === 'GET') return publicSettings(request, env);
       if (url.pathname === '/api/availability' && request.method === 'GET') return getAvailability(request, env, url);
       if (url.pathname === '/api/reservations' && request.method === 'POST') return createReservation(request, env);
+      if (url.pathname === '/calendar.ics' && request.method === 'GET') return publicCalendar(request, env);
 
       if (url.pathname.startsWith('/api/admin/')) {
         if (!requireAdmin(request, env)) return bad(request, env, 'Unauthorized.', 401);
@@ -357,6 +520,14 @@ export default {
 
         if (url.pathname === '/api/admin/expenses' && ['GET','POST'].includes(request.method)) return expenseRoutes(request, env);
         if (url.pathname === '/api/admin/ads' && ['GET','PUT'].includes(request.method)) return adRoutes(request, env);
+
+        if (url.pathname === '/api/admin/ota-feeds' && ['GET','POST'].includes(request.method)) return otaFeeds(request, env);
+        const otaSync = url.pathname.match(/^\/api\/admin\/ota-feeds\/(\d+)\/sync$/);
+        if (otaSync && request.method === 'POST') return syncOtaFeed(request, env, otaSync[1]);
+        const otaDelete = url.pathname.match(/^\/api\/admin\/ota-feeds\/(\d+)$/);
+        if (otaDelete && request.method === 'DELETE') return deleteOtaFeed(request, env, otaDelete[1]);
+
+        if (url.pathname === '/api/admin/handover-reset' && request.method === 'POST') return handoverReset(request, env);
       }
 
       return bad(request, env, 'Not found.', 404);
