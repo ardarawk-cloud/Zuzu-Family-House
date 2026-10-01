@@ -17,8 +17,13 @@ jobs:
         run: npm install -g wrangler
       - name: Configure D1 binding
         run: sed -i "s/REPLACE_WITH_CLOUDFLARE_D1_DATABASE_ID/${{ secrets.CLOUDFLARE_D1_DATABASE_ID }}/" wrangler.toml
-      - name: Apply database schema
+      - name: Apply base database schema
         run: wrangler d1 execute zuzu-prod --remote --file=./migrations/0001_init.sql
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Apply OTA calendar schema
+        run: wrangler d1 execute zuzu-prod --remote --file=./migrations/0002_ota_channels.sql
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
