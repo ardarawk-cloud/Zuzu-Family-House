@@ -5,7 +5,14 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="robots" content="noindex,nofollow,noarchive">
   <meta name="theme-color" content="#10241f">
+  <meta name="application-name" content="ZUZU Owner Suite">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="ZUZU Owner">
   <title>ZUZU Owner Suite</title>
+  <link rel="manifest" href="manifest.webmanifest?v=1">
+  <link rel="icon" href="pwa/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="zuzu-logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -40,7 +47,7 @@
     <main class="admin-main">
       <header class="admin-top">
         <div><div class="admin-eyebrow">ZUZU FAMILY HOUSE / OWNER</div><h1 id="viewTitle">Business overview</h1><p id="reportPeriod">Presentation dashboard</p></div>
-        <div class="admin-top-actions"><a class="ghost-btn" href="index.html">Website ↗</a><button class="ghost-btn" id="logoutBtn" type="button">Sign out</button><button class="dark-btn" onclick="exportCSV()">Export CSV</button></div>
+        <div class="admin-top-actions"><a class="ghost-btn" href="index.html">Website ↗</a><button class="ghost-btn" id="installPwaBtn" type="button" hidden>Install app</button><button class="ghost-btn" id="logoutBtn" type="button">Sign out</button><button class="dark-btn" onclick="exportCSV()">Export CSV</button></div>
       </header>
 
       <div class="preview-note"><span class="status-dot"></span><div><strong>Live production dashboard</strong><p>Reservations, pricing, expenses and marketing spend are loaded from the shared ZUZU production database.</p></div></div>
@@ -155,6 +162,6 @@
     </form>
   </div>
   <script src="config.js?v=2"></script>
-  <script src="admin.js?v=10"></script>
+  <script src="admin.js?v=11"></script>
 </body>
 </html>

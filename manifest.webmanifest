@@ -1,0 +1,72 @@
+{
+  "id": "/admin.html",
+  "name": "ZUZU Owner Suite",
+  "short_name": "ZUZU Owner",
+  "description": "Owner dashboard for ZUZU Family House reservations, finance, pricing and channel calendars.",
+  "start_url": "/admin.html#overview",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
+  "background_color": "#10241f",
+  "theme_color": "#10241f",
+  "categories": [
+    "business",
+    "travel"
+  ],
+  "lang": "en",
+  "icons": [
+    {
+      "src": "/pwa/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa/icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Reservations",
+      "short_name": "Reservations",
+      "url": "/admin.html#reservations",
+      "icons": [
+        {
+          "src": "/pwa/icon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Finance",
+      "short_name": "Finance",
+      "url": "/admin.html#finance",
+      "icons": [
+        {
+          "src": "/pwa/icon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Channels",
+      "short_name": "Channels",
+      "url": "/admin.html#channels",
+      "icons": [
+        {
+          "src": "/pwa/icon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ]
+}
