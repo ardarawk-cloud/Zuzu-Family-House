@@ -23,5 +23,42 @@ function closeModal(){const m=$('#bookingModal');if(!m)return;m.classList.remove
 function setupMenu(){const b=$('#menuToggle'),m=$('#mobileMenu'),backdrop=$('#menuBackdrop'),close=$('#menuClose');if(!b||!m)return;const setOpen=open=>{m.classList.toggle('open',open);backdrop?.classList.toggle('open',open);b.classList.toggle('open',open);b.setAttribute('aria-expanded',String(open));m.setAttribute('aria-hidden',String(!open));backdrop?.setAttribute('aria-hidden',String(!open));document.body.classList.toggle('menu-open',open)};b.addEventListener('click',()=>setOpen(!m.classList.contains('open')));close?.addEventListener('click',()=>setOpen(false));backdrop?.addEventListener('click',()=>setOpen(false));m.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>setOpen(false)));document.addEventListener('keydown',e=>{if(e.key==='Escape'&&m.classList.contains('open'))setOpen(false)})}
 function setupModal(){document.querySelectorAll('.reserve-trigger').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();openModal()}));document.querySelectorAll('[data-close-modal]').forEach(el=>el.addEventListener('click',closeModal));document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()})}
 function setupFaq(){document.querySelectorAll('.faq details').forEach(d=>d.addEventListener('toggle',()=>{if(!d.open)return;document.querySelectorAll('.faq details').forEach(o=>{if(o!==d)o.open=false})}))}
-async function saveBooking(e){e.preventDefault();syncMainDatesFromModal();const x=updateSummary(),notice=$('#bookingNotice'),success=$('#bookingSuccess');if(x.nights<1){notice.textContent='Please select valid check-in and check-out dates.';notice.classList.add('show');success.classList.remove('show');return}notice.classList.remove('show');const f=new FormData(e.target),q=new URLSearchParams(location.search);let booking={id:'ZUZU-'+Date.now().toString().slice(-7),createdAt:new Date().toISOString(),name:String(f.get('name')||'').trim(),email:String(f.get('email')||'').trim(),phone:String(f.get('phone')||'').trim(),notes:String(f.get('notes')||'').trim(),checkin:x.ci,checkout:x.co,guests:x.guests,nights:x.nights,subtotal:x.subtotal,service:x.service,tax:x.tax,total:x.total,status:'Pending',source:q.get('utm_source')||'Direct',campaign:q.get('utm_campaign')||''};try{if(API_BASE){const result=await api('/api/reservations',{method:'POST',body:JSON.stringify(booking)});booking={...booking,...result.reservation}}else{const list=safeParse('zuzu_reservations',[]);list.unshift(booking);localStorage.setItem('zuzu_reservations',JSON.stringify(list))}success.innerHTML=`Reservation request created.<br><strong>Reference ${booking.id}</strong>`;success.classList.add('show');e.target.reset();remoteQuote=null;syncModalDatesFromMain();updateSummary()}catch(err){notice.textContent=err.message||'Unable to create reservation right now.';notice.classList.add('show');success.classList.remove('show')}}
+async function saveBooking(e){
+e.preventDefault();
+syncMainDatesFromModal();
+const x=updateSummary(),notice=$('#bookingNotice'),success=$('#bookingSuccess');
+if(x.nights<1){notice.textContent='Please select valid check-in and check-out dates.';notice.classList.add('show');success.classList.remove('show');return}
+notice.classList.remove('show');
+const f=new FormData(e.target),q=new URLSearchParams(location.search);
+let booking={id:'ZUZU-'+Date.now().toString().slice(-7),createdAt:new Date().toISOString(),name:String(f.get('name')||'').trim(),email:String(f.get('email')||'').trim(),phone:String(f.get('phone')||'').trim(),notes:String(f.get('notes')||'').trim(),checkin:x.ci,checkout:x.co,guests:x.guests,nights:x.nights,subtotal:x.subtotal,service:x.service,tax:x.tax,total:x.total,status:'Pending',source:q.get('utm_source')||'Direct',campaign:q.get('utm_campaign')||''};
+try{
+if(API_BASE){
+const availability=await loadRemoteQuote(x.ci,x.co);
+if(availability&&!availability.available){notice.textContent='Those dates are not available. Please choose different dates.';notice.classList.add('show');success.classList.remove('show');return}
+const result=await api('/api/reservations',{method:'POST',body:JSON.stringify(booking)});
+booking={...booking,...result.reservation};
+}else{
+const list=safeParse('zuzu_reservations',[]);list.unshift(booking);localStorage.setItem('zuzu_reservations',JSON.stringify(list));
+}
+const lines=[
+'Hello ZUZU Family House, I would like to request a reservation.',
+'',
+'Name: '+booking.name,
+'WhatsApp / Phone: '+booking.phone,
+booking.email?'Email: '+booking.email:'',
+'Check-in: '+fmtDate(booking.checkin),
+'Check-out: '+fmtDate(booking.checkout),
+'Guests: '+booking.guests,
+'Nights: '+booking.nights,
+'Estimated total: '+IDR.format(booking.total),
+booking.notes?'Notes: '+booking.notes:'',
+'Reference: '+booking.id,
+'',
+'Please confirm availability and payment instructions. Thank you.'
+].filter(Boolean);
+const wa='https://wa.me/6285119309638?text='+encodeURIComponent(lines.join('\n'));
+success.innerHTML='Reservation request saved.<br><strong>Opening WhatsApp…</strong>';success.classList.add('show');
+setTimeout(()=>{window.location.href=wa},250);
+}catch(err){notice.textContent=err.message||'Unable to create reservation right now.';notice.classList.add('show');success.classList.remove('show')}
+}
 document.addEventListener('DOMContentLoaded',()=>{ensureModalGuests();setDateLimits();setupMenu();setupModal();setupFaq();syncModalDatesFromMain();loadRemoteSettings();const y=$('#year');if(y)y.textContent=new Date().getFullYear();$('#checkin')?.addEventListener('change',async()=>{syncCheckoutMin('#checkin','#checkout');syncModalDatesFromMain();remoteQuote=null;updateSummary();await loadRemoteQuote($('#checkin').value,$('#checkout')?.value||'');updateSummary()});$('#checkout')?.addEventListener('change',async()=>{syncModalDatesFromMain();remoteQuote=null;updateSummary();await loadRemoteQuote($('#checkin')?.value||'',$('#checkout').value);updateSummary()});$('#guests')?.addEventListener('change',()=>{if($('#modalGuests'))$('#modalGuests').value=$('#guests').value;updateSummary()});$('#modalCheckin')?.addEventListener('change',async()=>{syncCheckoutMin('#modalCheckin','#modalCheckout');syncMainDatesFromModal();remoteQuote=null;updateSummary();await loadRemoteQuote($('#modalCheckin').value,$('#modalCheckout')?.value||'');updateSummary()});$('#modalCheckout')?.addEventListener('change',async()=>{syncMainDatesFromModal();remoteQuote=null;updateSummary();await loadRemoteQuote($('#modalCheckin')?.value||'',$('#modalCheckout').value);updateSummary()});$('#modalGuests')?.addEventListener('change',()=>{if($('#guests'))$('#guests').value=$('#modalGuests').value;updateSummary()});$('#checkAvailability')?.addEventListener('click',async()=>{const x=updateSummary();if(x.nights<1){document.getElementById('availability')?.scrollIntoView({behavior:'smooth'});return}if(API_BASE){const result=await loadRemoteQuote(x.ci,x.co);updateSummary();if(result&&!result.available){openModal();const notice=$('#bookingNotice');if(notice){notice.textContent='Those dates are not available. Please choose different dates.';notice.classList.add('show')}return}}openModal()});$('#bookingForm')?.addEventListener('submit',saveBooking);updateSummary()});
