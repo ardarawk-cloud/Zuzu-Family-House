@@ -1,0 +1,23 @@
+
+.payment-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:12px}
+.payment-status{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:#f7f2e9;margin:14px 0}
+.payment-status strong{font-size:12px}.payment-status span{font-size:8px;color:#7f796f;text-transform:uppercase;letter-spacing:.09em}
+.payment-form{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.payment-form label{display:grid;gap:5px;font-size:8px;text-transform:uppercase;letter-spacing:.09em;color:#7f7a71;font-weight:700}
+.payment-form input,.payment-form select{height:42px;border:1px solid #ddd4c6;border-radius:10px;background:#fff;padding:0 11px;font-size:10px;outline:none}
+.payment-form input[readonly],.payment-form input:disabled{background:#f1ede5;color:#8e887f}
+.payment-form .full{grid-column:1/-1}
+.payment-switch{display:flex!important;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.payment-switch input{width:20px;height:20px}
+.payment-actions{display:flex;gap:8px;grid-column:1/-1}
+.payment-actions .save-btn,.payment-actions .ghost-btn{width:auto;flex:1}
+.payment-note{margin:12px 0 0;color:#746e64;font-size:9px;line-height:1.7}
+.payment-security{display:grid;gap:12px}
+.payment-security .security-card{padding:15px;border-radius:14px;background:#102b24;color:#fff}
+.payment-security .security-card strong{display:block;font-family:"Cormorant Garamond",Georgia,serif;font-size:24px;font-weight:600;margin-bottom:6px}
+.payment-security .security-card p{margin:0;color:#a7bbb2;font-size:9px;line-height:1.7}
+.payment-security ul{margin:0;padding-left:18px;color:#736d62;font-size:9px;line-height:1.9}
+.payment-badge{display:inline-flex;border-radius:999px;padding:6px 9px;font-size:7px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;background:#eee6d8;color:#76571e}
+.payment-badge.online{background:#dcece4;color:#235c43}
+@media(max-width:900px){.payment-grid{grid-template-columns:1fr}}
+@media(max-width:620px){.payment-form{grid-template-columns:1fr}.payment-form .full,.payment-actions{grid-column:auto}.payment-actions{display:grid}}
