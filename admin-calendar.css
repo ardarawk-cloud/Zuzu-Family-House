@@ -1,0 +1,40 @@
+
+.calendar-layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(310px,.65fr);gap:12px}
+.calendar-side{display:grid;gap:12px;align-content:start}
+.calendar-head{align-items:center}
+.calendar-nav{display:flex;gap:6px}
+.calendar-nav .ghost-btn{min-width:40px;padding:9px 12px}
+.calendar-legend{display:flex;flex-wrap:wrap;gap:14px;margin:16px 0 10px;color:#77736a;font-size:8px;text-transform:uppercase;letter-spacing:.07em}
+.calendar-legend span{display:flex;align-items:center;gap:6px}
+.cal-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.cal-dot.pending,.cal-chip.pending{background:#f1d9a7;color:#6f4d16}
+.cal-dot.confirmed,.cal-chip.confirmed{background:#cfded8;color:#245748}
+.cal-dot.paid,.cal-chip.paid{background:#b9dfc9;color:#175939}
+.cal-dot.blocked,.cal-chip.blocked{background:#d8d2c8;color:#665f55}
+.calendar-weekdays,.calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
+.calendar-weekdays{border:1px solid var(--line);border-bottom:0;border-radius:12px 12px 0 0;overflow:hidden;background:#f3eee5}
+.calendar-weekdays span{padding:9px 6px;text-align:center;font-size:7px;text-transform:uppercase;letter-spacing:.1em;color:#8a847a;border-right:1px solid var(--line2)}
+.calendar-weekdays span:last-child{border-right:0}
+.calendar-grid{border-left:1px solid var(--line);border-top:1px solid var(--line)}
+.cal-day{min-height:92px;padding:7px;background:#fff;border-right:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden}
+.cal-day.muted{background:#f8f5ef;color:#b0aaa0}
+.cal-day.today{box-shadow:inset 0 0 0 2px #b78531}
+.cal-day-num{font-size:9px;font-weight:800;margin-bottom:6px}
+.cal-chips{display:grid;gap:4px}
+.cal-chip{display:block;border-radius:6px;padding:4px 5px;font-size:7px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-more{font-size:7px;color:#8d877d;padding-left:2px}
+.calendar-form{grid-template-columns:1fr 1fr;margin-top:15px}
+.calendar-form .save-btn,.calendar-form .dark-btn{grid-column:1/-1}
+.calendar-form select{height:40px;border:1px solid #ddd4c6;border-radius:10px;background:#fff;padding:0 11px;font-size:10px;outline:none}
+.calendar-list-panel{margin-top:12px}
+.calendar-entry-list{margin-top:12px;display:grid}
+.calendar-entry{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:12px 0;border-top:1px solid var(--line2)}
+.calendar-entry:first-child{border-top:0}
+.calendar-entry>div:first-child{display:grid;gap:3px}
+.calendar-entry strong{font-size:10px}
+.calendar-entry span{font-size:8px;color:#8c867c}
+.calendar-entry-actions{display:flex;align-items:center;gap:8px}
+.blocked-entry{background:rgba(233,228,218,.38);padding-left:8px;padding-right:8px;border-radius:10px}
+.status-pill.confirmed,.status-select.confirmed{background:#dce9e3;color:#275d4d}
+@media(max-width:1100px){.calendar-layout{grid-template-columns:1fr}.calendar-side{grid-template-columns:1fr 1fr}}
+@media(max-width:720px){.calendar-side{grid-template-columns:1fr}.calendar-head{display:grid;gap:12px}.calendar-nav{width:100%}.calendar-nav .ghost-btn{flex:1}.cal-day{min-height:72px;padding:5px}.cal-chip{font-size:6px;padding:3px 4px}.calendar-weekdays span{font-size:6px}.calendar-form{grid-template-columns:1fr}.calendar-form .save-btn,.calendar-form .dark-btn{grid-column:auto}.calendar-entry{align-items:flex-start;display:grid}.calendar-entry-actions{justify-content:space-between}}
