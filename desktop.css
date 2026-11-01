@@ -57,9 +57,11 @@
   .house-facts p{font-size:12px}
 
   .location{padding:80px 0}
-  .location-card{grid-template-columns:1fr .42fr;gap:76px}
+  .location-card{grid-template-columns:.62fr 1.38fr;gap:42px}
   .location h2{font-size:clamp(60px,5vw,82px);text-wrap:balance}
   .location p{font-size:14px;max-width:560px}
+  .location-map{margin-right:-36px}
+  .location-map img{width:calc(100% + 36px)}
   .location-pin{width:190px;height:190px;box-shadow:0 0 0 30px rgba(255,255,255,.03)}
 
   .essentials-grid{grid-template-columns:.68fr 1.32fr;gap:84px}
