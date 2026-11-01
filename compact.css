@@ -77,14 +77,29 @@ body.menu-open{overflow:hidden}
   .gallery-item:first-child{aspect-ratio:4/3}
 }
 
-.location{overflow:hidden;position:relative}
-.location-card{display:grid;grid-template-columns:.72fr 1.28fr;align-items:center;gap:34px;min-height:0}
-.location-copy{position:relative;z-index:2;width:auto;padding:0}
-.location-map{position:relative;z-index:1;width:100%;margin:0;border:0;border-radius:0;background:transparent;box-shadow:none;overflow:visible}
-.location-map:before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:
-linear-gradient(90deg,var(--forest) 0%,rgba(15,43,36,.78) 8%,rgba(15,43,36,.30) 20%,transparent 34%),
-linear-gradient(180deg,var(--forest) 0%,rgba(15,43,36,.18) 7%,transparent 16%,transparent 84%,rgba(15,43,36,.18) 93%,var(--forest) 100%),
-linear-gradient(270deg,var(--forest) 0%,rgba(15,43,36,.12) 5%,transparent 14%)}
-.location-map img{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;object-position:center;border:0;border-radius:0;box-shadow:none;filter:saturate(.97) contrast(.97)}
-@media(max-width:820px){.location-card{grid-template-columns:1fr}.location-map{order:2;margin-top:22px}.location-map:before{background:linear-gradient(180deg,var(--forest) 0%,rgba(15,43,36,.42) 8%,transparent 22%)}}
-@media(max-width:560px){.location-map{margin-top:14px}.location-map img{aspect-ratio:4/3}}}
+.location{
+  position:relative;
+  overflow:hidden;
+  color:white;
+  padding:62px 0;
+  background-color:var(--forest);
+  background-image:
+    linear-gradient(90deg,var(--forest) 0%,var(--forest) 34%,rgba(15,43,36,.96) 40%,rgba(15,43,36,.62) 50%,rgba(15,43,36,.18) 62%,transparent 74%),
+    url("assets/gallery/zuzu-location-map.png");
+  background-repeat:no-repeat,no-repeat;
+  background-position:center,right center;
+  background-size:100% 100%,62% auto;
+}
+.location-card{display:grid;grid-template-columns:.72fr 1.28fr;align-items:center;gap:34px;min-height:370px}
+.location-copy{position:relative;z-index:1;width:auto;padding:0}
+.location-map{display:none}
+@media(max-width:820px){
+  .location{
+    background-image:none;
+    background-color:var(--forest);
+  }
+  .location-card{grid-template-columns:1fr;min-height:0}
+  .location-map{display:block;order:2;margin-top:22px}
+  .location-map img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border:0;border-radius:0;box-shadow:none}
+}
+@media(max-width:560px){.location-map{margin-top:14px}}.location-map img{aspect-ratio:4/3}}}
