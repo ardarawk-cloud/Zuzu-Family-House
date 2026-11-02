@@ -119,3 +119,27 @@ body.menu-open{overflow:hidden}
   .location-map img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border:0;border-radius:0;box-shadow:none}
 }
 @media(max-width:560px){.location-map{margin-top:14px}}.location-map img{aspect-ratio:4/3}}}
+
+
+/* ZUZU gallery lightbox v1 */
+.gallery-item[data-gallery-item]{cursor:zoom-in}
+.gallery-item[data-gallery-item]:focus-visible{outline:3px solid var(--gold2);outline-offset:3px}
+.gallery-lightbox{position:fixed;inset:0;z-index:140;display:none;align-items:center;justify-content:center;padding:28px;background:rgba(5,14,12,.92);backdrop-filter:blur(14px)}
+.gallery-lightbox.open{display:flex}
+.gallery-lightbox-stage{position:relative;width:min(1180px,94vw);height:min(82vh,860px);display:flex;align-items:center;justify-content:center}
+.gallery-lightbox img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;border-radius:14px;box-shadow:0 28px 80px rgba(0,0,0,.4)}
+.gallery-lightbox-caption{position:absolute;left:50%;bottom:-38px;transform:translateX(-50%);width:min(860px,80vw);text-align:center;color:#f5efe3;font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+.gallery-lightbox-close,.gallery-lightbox-prev,.gallery-lightbox-next{position:absolute;z-index:2;border:1px solid rgba(255,255,255,.2);background:rgba(10,25,21,.56);color:white;display:grid;place-items:center;cursor:pointer;backdrop-filter:blur(10px)}
+.gallery-lightbox-close{right:24px;top:20px;width:48px;height:48px;border-radius:50%;font-size:30px;line-height:1}
+.gallery-lightbox-prev,.gallery-lightbox-next{top:50%;transform:translateY(-50%);width:50px;height:58px;border-radius:999px;font-size:24px}
+.gallery-lightbox-prev{left:24px}.gallery-lightbox-next{right:24px}
+body.gallery-open{overflow:hidden}
+@media(max-width:560px){
+  .gallery-lightbox{padding:18px}
+  .gallery-lightbox-stage{width:100%;height:76vh}
+  .gallery-lightbox img{border-radius:10px}
+  .gallery-lightbox-close{right:12px;top:12px;width:44px;height:44px}
+  .gallery-lightbox-prev,.gallery-lightbox-next{width:42px;height:50px}
+  .gallery-lightbox-prev{left:10px}.gallery-lightbox-next{right:10px}
+  .gallery-lightbox-caption{bottom:-34px;width:88vw;font-size:8px}
+}
